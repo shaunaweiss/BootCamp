@@ -1,0 +1,259 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>BootCamp Fitness</title>
+
+	<meta charset="utf-8" />
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">-->
+    <link rel="stylesheet" href="Content/Bootswatch.css" />
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"
+			integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+			crossorigin="anonymous">
+	</script>
+	<!-- Latest compiled JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+    
+	<body >
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="#">BOOTCAMP</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarColor03">
+                <ul class="navbar-nav mr-auto">
+                </ul>
+            </div>
+        </nav>
+        <div>
+
+            <div>
+                <table class="table table-sm" style="width:100%">
+                    <tr>
+                        <td><input type="text" value="" id="txtClassDOW" class="form-control" />Day of Week (M, T, W, R, F, S)</td>
+                        <td> <input type="button" id="btnGetClassByDay" value="Get Classes By Day" class="btn btn-primary" /></td>
+                    </tr>
+                    <tr>
+
+                        <td><input type="text" value="" id="txtInstructorFName" class="form-control" />First Name</td>
+                        <td><input type="text" value="" id="txtInstructorLName" class="form-control" />Last Name</td>
+                        <td><input type="button" id="btnGetClassByInstructor" value="Get Classes By Instructor" class="btn btn-primary" /><i> <br />Example: Sisile Causer</i></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" value="" id="txtLevel" class="form-control" />Level</td>
+                        <td><input type="button" id="btnGetClassByLevel" value="Get Classes By Level" class="btn btn-primary" /></td>
+                        <td> 1: Beginner, 2: Intermediate, 3: Advanced</td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" value="" id="txtType" class="form-control" />Body Focus Area</td>
+                        <td><input type="button" id="btnGetClassByFocus" value="Get Classes By Focus Type" class="btn btn-primary" /></td>
+                        <td> 1: Lower Body, 2: Core, 3: Upper Body, 4: Full Body</td>
+                    </tr>
+                    <tr>
+
+                        <td><input type="text" value="" id="txtClassName" class="form-control" />Class Name</td>
+                        <td><input type="button" id="btnGetCustomersByClass" value="Get Customers By Class" class="btn btn-primary" /><i> <br />Example: Zumba</i></td>
+                    </tr>
+                    <tr>
+
+                        <td><input type="text" value="" id="txtCustomerId1" class="form-control" /> CustomerID: </td>
+                        <td><input type="text" value="" id="txtcWeight" class="form-control" /> Current Weight: </td>
+                        <td><input type="text" value="" id="txtcHeight" class="form-control" /> Current Height (inches): </td>
+                        <td><input type="text" value="" id="txtdate" class="form-control" /> Date Weighed in: </td>
+
+                        <td><input type="button" id="btnAddCustomerMetric" value="Add Customer Metric" class="btn btn-primary" /><br /> </td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" value="" id="txtCustomerId2" class="form-control" /> CustomerID: </td>
+                        <td><input type="text" value="" id="txtCustomerFName" class="form-control" /> First Name: </td>
+                        <td><input type="text" value="" id="txtCustomerLName" class="form-control" /> Last Name: </td>
+                        <td><input type="text" value="" id="txtEmailAddress1" class="form-control" /> Email Address: </td>
+                        <td><input type="text" value="" id="txtDelete" class="form-control" /> Enter 1 to delete or 0 for add/update: </td>
+
+                        <td><input type="button" id="btnAddUpdateDeleteCustomer" value="Add/Update/Delete Customer" class="btn btn-primary" /><br /> <i> This will return an error code of O if successful. </i></td>
+                    </tr>
+                    <tr>
+                        <td><input type="text" value="" id="txtEmailAddress2" class="form-control" />Customer Email Address</td>
+                        <td><input type="button" id="btnGetLatestWeighIn" value="Get Latest Weigh In Info" class="btn btn-primary" /></td>
+
+                    </tr>
+                    <tr>
+                        <td><input type="button" id="btnClear" value="Clear" class="btn btn-danger" /></td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="5">
+                            <!-- ol is the container that will store the lists -->
+                            <ol id="ulList" class="list-group-item" style="color:black"></ol>
+                        </td>
+                    </tr>
+                </table>
+                 
+            </div>
+  </div>
+		<script type="text/javascript">
+			$(document).ready(function () {
+				var ulList = $('#ulList');
+				var classDOW = $('#txtClassDOW');
+				var instructorFName = $('#txtInstructorFName');
+				var instructorLName = $('#txtInstructorLName');
+				var customerId1 = $('#txtCustomerId1');
+				var customerId2 = $('#txtCustomerId2');
+				var customerFName = $('#txtCustomerFName');
+				var customerLName = $('#txtCustomerLName');
+				var emailAddress1 = $('#txtEmailAddress1');
+				var emailAddress2 = $('#txtEmailAddress2');
+				var deleteCust = $('#txtDelete');
+				var cweight = $('#txtcWeight');
+				var cheight = $('#txtcHeight');
+				var date = $('#txtdate');
+				var level = $('#txtLevel');
+				var type = $('#txtType');
+				var className = $('#txtClassName')
+
+
+				//===================================================================================================
+				// Get a list of Classes By Day from an API
+				//===================================================================================================
+				$('#btnGetClassByDay').click(function () {
+				    ajax("getClassByDay", { "classDOW": classDOW.val() }, function (data) {
+						ulList.empty();
+						$.each(data, function (index, val) {
+						    ulList.append('<li class="list-group-item">' + ('Class Name: ' + val.ClassName + ' Level: ' + val.ClassLevel + ' Focus: ' + val.ClassFocusName + ' Instructor: ' + val.InstructorName+ ' ' +'Day: ' + val.ClassDOW + ' Time: ' + val.ClassTime + ' Studio: ' + val.ClassStudio) + '</li>')
+						});
+					});
+				});
+
+			    //===================================================================================================
+			    // Get a list of Classes By Instructor from an API
+			    //===================================================================================================
+				$('#btnGetClassByInstructor').click(function () {
+				    ajax("getClassByInstructor", { "firstName": instructorFName.val(), "lastName": instructorLName.val() }, function (data) {
+				        ulList.empty();
+				        $.each(data, function (index, val) {
+				            ulList.append('<li class="list-group-item">' + ('Class Name: ' + val.ClassName + ' Level: ' + val.ClassLevel + ' Focus: ' + val.ClassFocusName + ' Instructor: '+ val.InstructorName + ' Day: ' + val.ClassDOW + ' Time: ' + val.ClassTime + ' Studio ' + val.ClassStudio) + '</li>')
+				        });
+				    });
+				});
+
+			    //===================================================================================================
+			    // Get a list of Classes By Level from an API
+			    //===================================================================================================
+				$('#btnGetClassByLevel').click(function () {
+				    ajax("getClassByLevel", { "LevelID": level.val() }, function (data) {
+				        ulList.empty();
+				        $.each(data, function (index, val) {
+				            ulList.append('<li class="list-group-item">' + ('Class Name: ' + val.ClassName + ' Level: ' + val.ClassLevel + ' Focus: ' + val.ClassFocusName + ' Instructor: ' + val.InstructorName + ' ' + 'Day: ' + val.ClassDOW + ' Time: ' + val.ClassTime + ' Studio: ' + val.ClassStudio) + '</li>')
+				        });
+				    });
+				});
+
+			    //===================================================================================================
+			    // Get a list of Classes By Focus Type from an API
+			    //===================================================================================================
+				$('#btnGetClassByFocus').click(function () {
+				    ajax("getClassByFocus", { "ClassFocusID": type.val() }, function (data) {
+				        ulList.empty();
+				        $.each(data, function (index, val) {
+				            ulList.append('<li class="list-group-item">' + ('Class Name: ' + val.ClassName + ' Level: ' + val.ClassLevel + ' Focus: '+ val.ClassFocusName + ' Instructor: ' + val.InstructorName + ' ' + 'Day: ' + val.ClassDOW + ' Time: ' + val.ClassTime + ' Studio: ' + val.ClassStudio) + '</li>')
+				        });
+				    });
+				});
+
+			    //===================================================================================================
+			    // Add Customer Metric
+			    //===================================================================================================
+				$('#btnAddCustomerMetric').click(function () {
+				    ajax("addCustomerMetric", { "CustomerID": customerId1.val(), "weightInLbs": cweight.val(), "heightInInches": cheight.val(), "weighInDate": date.val() }, function (data) {
+				        ulList.empty();
+				        $.each(data, function (index, val) {
+				            ulList.append('<li class="list-group-item">' + ('CustomerID: ' + val.CustomerID + ', ' + 'Updated Weight: ' + val.weightInLbs + ' Last updated: ' + val.LastUpdated + ' Error Code: ' + val.ErroCode + ' Error Message: ' + val.ErroMsg) + '</li>')
+				        });
+				    });
+				});
+
+
+			    //===================================================================================================
+			    // Add/Update/Delete a customer using an API
+			    //===================================================================================================
+				$('#btnAddUpdateDeleteCustomer').click(function () {
+				    ajax("addUpdateDeleteCustomer", { "CustomerID": customerId2.val(), "EmailAddress": emailAddress1.val(), "FirstName": customerFName.val(), "LastName": customerLName.val(), "hardDelete": deleteCust.val() }, function (data) {
+				        ulList.empty();
+				        $.each(data, function (index, val) {
+				            ulList.append('<li class="list-group-item">' + ('Customer Id: ' + val.CustomerID + ' Error Code: ' + val.ErroCode + ' Message: ' + val.ErroMsg) + '</li>')
+				        });
+				    });
+				});
+
+
+			
+
+			    //===================================================================================================
+			    // Get Latest Weigh In Info
+			    //===================================================================================================
+				$('#btnGetLatestWeighIn').click(function () {
+				    ajax("getLatestWeighIn", { "EmailAddress": emailAddress2.val() }, function (data) {
+				        ulList.empty();
+				        $.each(data, function (index, val) {
+				            ulList.append('<li class="list-group-item">' + ('Name: '+val.FirstName + ' ' + val.LastName + ' Date: ' + val.WeighInDate + ' Weight: ' + val.WeightInLbs + ' BMI: ' + val.BMI) + '</li>')
+				        });
+				    });
+				});
+
+
+			    //===================================================================================================
+			    // Get a Customers By Class from an API
+			    //===================================================================================================
+				$('#btnGetCustomersByClass').click(function () {
+				    ajax("getCustomersByClass", { "ClassName": className.val() }, function (data) {
+				        ulList.empty();
+				        $.each(data, function (index, val) {
+				            ulList.append('<li class="list-group-item">' + ('Class Name: ' + val.ClassName + ' Day: ' + val.ClassDOW + ' Time: ' + val.ClassTime + ' Studio: ' + val.ClassStudio + ' Customer Name: ' + val.FirstName+' '+val.LastName) + '</li>')
+				        });
+				    });
+				});
+
+				//===================================================================================================
+				// Button to clear the fields
+				//===================================================================================================
+				$('#btnClear').click(function () {
+					ulList.empty();
+					classDOW.val('');
+					ulList.val('');
+					instructorFName.val('');
+					instructorLName.val('');
+					customerId1.val('');
+					customerId2.val('');
+					customerFName.val('');
+					customerLName.val('');
+					emailAddress1.val('');
+					emailAddress2.val('');
+					deleteCust.val('');
+					cweight.val('');
+					cheight.val('');
+					date.val('');
+					level.val('');
+					type.val('');
+					className.val('');
+
+				});
+
+
+				//===================================================================================================
+				// Generic method for AJAX calls
+				//===================================================================================================
+				function ajax(method, data, fn) {
+					$.ajax({
+						type: 'POST',
+						url: 'BootCampAPI.asmx/' + method,
+						dataType: 'json',
+						data: data,
+						success: fn,
+						error: function (data) { debugger; alert(data.responseText)}
+					});
+				}
+			});
+		</script>
+	</body>
+</html>
